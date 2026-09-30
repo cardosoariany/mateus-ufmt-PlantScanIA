@@ -84,7 +84,6 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 .feat b{font:800 19px 'Bricolage Grotesque',sans-serif;display:block}
 .feat small{display:block;font:500 13px Figtree,sans-serif;opacity:.78;margin-top:2px}
 #desc{width:100%;margin-top:10px;padding:12px 14px;border-radius:14px;border:1.5px solid #3c6a58;background:#08201a;color:#fff;font:15px Figtree,sans-serif;resize:vertical}
-#apiKey{width:100%;margin-top:10px;padding:12px 14px;border-radius:14px;border:1.5px solid #3c6a58;background:#08201a;color:#fff;font:14px Figtree,sans-serif;}
 .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
 .slot{aspect-ratio:1;border-radius:14px;position:relative;overflow:hidden;background:#0b241c;border:1.5px dashed #3c6a58;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#9fbcaa;cursor:pointer}
 .slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -129,7 +128,6 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
         <input type="file" id="fileMore" accept="image/*" multiple hidden>
         <div class="slots" id="slots" hidden></div>
         
-        <input type="password" id="apiKey" placeholder="Cole sua Gemini API Key aqui">
         <textarea id="desc" rows="2" placeholder="Descreva a planta aqui (ex.: folhas opostas, flores brancas pequenas)"></textarea>
         
         <div class="actions" id="acts">
@@ -160,6 +158,9 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 </footer>
 
 <script>
+// COLOQUE A SUA GEMINI API KEY AQUI:
+const GEMINI_API_KEY = "SUA_CHAVE_GEMINI_AQUI";
+
 const DB=[
 ['bidens','Picão-preto','Asteraceae','Erva ereta com frutos que grudam em roupas e animais.','Capine antes da floração;Use cobertura morta para reduzir a germinação'],
 ['cyperus','Tiririca','Cyperaceae','Forma tubérculos no solo e rebrota com facilidade.','Evite revolver o solo sem necessidade;Em áreas grandes, peça orientação técnica sobre herbicidas sistêmicos'],
@@ -217,11 +218,6 @@ const LIST=DB.map((w,i)=>i+': '+w.n+' — '+w.k[0]+' ('+w.f+'). '+w.d).join('\n'
 
 let files=[], maxImgs=4;
 const SLOT_LABEL=['Planta toda','Folha de perto','Flor ou fruto','Extra'];
-
-if(localStorage.getItem('gemini_api_key')){
-  $('apiKey').value = localStorage.getItem('gemini_api_key');
-}
-$('apiKey').onchange = () => localStorage.setItem('gemini_api_key',$('apiKey').value.trim());
 
 function renderThumbs(){
   $('preview').src=files[0]?URL.createObjectURL(files[0]):'';
@@ -298,14 +294,8 @@ const busy=b=>{$('vf').classList.toggle('scanning',b);$('scan').disabled=$('agai
   if(b)$('out').innerHTML='<div class="msg info">Analisando a planta...</div>'};
 
 $('scan').onclick=async()=>{
-  const key = $('apiKey').value.trim();
-  if(!key){
-    err('Por favor, insira a sua Gemini API Key no campo abaixo para realizar o escaneamento.');
-    return;
-  }
-
   const d=$('desc').value.trim();
-  if(!files.length && d.length<5){
+  if(!files.length && d.length<3){
     err('Adicione uma fotografia ou descreva as características da planta na caixa de texto.');
     return;
   }
@@ -337,7 +327,7 @@ No máximo 3 candidatas. Seja conservador na confiança.`;
       });
     }
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ contents: [{ parts }] })
