@@ -24,7 +24,7 @@ header{background:var(--pine);color:#fff;padding:env(safe-area-inset-top,0) 0 0}
 .hero p{color:#bcd3c3;font-size:17px;max-width:44ch;margin:14px 0 0}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
 .chips span{border:1px solid #3c6a58;color:#d8e9de;border-radius:999px;padding:4px 12px;font-size:13px}
-.vf{position:relative;aspect-ratio:4/5;max-height:440px;width:100%;margin:0 auto;border-radius:22px;background:#0b241c;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.vf{position:relative;aspect-ratio:4/5;max-height:380px;width:100%;margin:0 auto;border-radius:22px;background:#0b241c;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .vf img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .vf .c{position:absolute;width:38px;height:38px;border:4px solid var(--sun);z-index:3}
 .c.a{top:16px;left:16px;border-right:0;border-bottom:0;border-radius:12px 0 0 0}
@@ -83,11 +83,8 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 .feat svg{width:66px;height:66px;color:var(--pine)}
 .feat b{font:800 19px 'Bricolage Grotesque',sans-serif;display:block}
 .feat small{display:block;font:500 13px Figtree,sans-serif;opacity:.78;margin-top:2px}
-#desc{width:100%;margin-top:12px;padding:12px 14px;border-radius:14px;border:1.5px solid #3c6a58;background:#08201a;color:#fff;font:16px Figtree,sans-serif;resize:vertical}
-#apiKey{width:100%;margin-top:12px;padding:12px 14px;border-radius:14px;border:1.5px solid #3c6a58;background:#08201a;color:#fff;font:14px Figtree,sans-serif;}
-#note{margin:14px 0 0;background:#e1ecd9}
-.thumbs{display:flex;gap:8px;margin-top:8px}
-.thumbs img{width:56px;height:56px;object-fit:cover;border-radius:10px;border:1.5px solid var(--sun)}
+#desc{width:100%;margin-top:10px;padding:12px 14px;border-radius:14px;border:1.5px solid #3c6a58;background:#08201a;color:#fff;font:15px Figtree,sans-serif;resize:vertical}
+#apiKey{width:100%;margin-top:10px;padding:12px 14px;border-radius:14px;border:1.5px solid #3c6a58;background:#08201a;color:#fff;font:14px Figtree,sans-serif;}
 .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
 .slot{aspect-ratio:1;border-radius:14px;position:relative;overflow:hidden;background:#0b241c;border:1.5px dashed #3c6a58;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#9fbcaa;cursor:pointer}
 .slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -114,7 +111,7 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
     <div class="hero">
       <div>
         <h1>Aponte a câmera e descubra a daninha.</h1>
-        <p>Identifique plantas daninhas do Brasil e da América Latina a partir de uma foto e veja como controlá-las.</p>
+        <p>Identifique plantas daninhas do Brasil e da América Latina a partir de uma foto ou descrição e veja como controlá-las.</p>
         <div class="chips"><span>Brasil</span><span>América Latina</span><span>Dicas de manejo</span></div>
       </div>
       <div>
@@ -125,19 +122,18 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
           <div class="hint" id="hint">
             <svg viewBox="0 0 64 64" fill="none"><path d="M32 54C16 48 10 36 13 20c16 0 28 6 28 22 0 6-3 10-9 12z" fill="#2e8b57"/><path d="M32 54c0-14 5-22 14-28" stroke="#dcebe1" stroke-width="2.5" stroke-linecap="round"/></svg>
             <strong>Toque para tirar uma foto</strong>
-            <small>Ou escolha uma imagem da galeria. Foque em folhas e flores.</small>
+            <small>Ou escolha uma imagem da galeria.</small>
           </div>
         </label>
         <input type="file" id="file" accept="image/*" capture="environment">
         <input type="file" id="fileMore" accept="image/*" multiple hidden>
         <div class="slots" id="slots" hidden></div>
-        <div class="msg info" id="note" hidden></div>
         
-        <input type="password" id="apiKey" placeholder="Cole sua Gemini API Key aqui (Google AI Studio)">
-        <textarea id="desc" rows="2" placeholder="Opcional: Descreva a planta (ex.: flores brancas, caule quadrado)"></textarea>
+        <input type="password" id="apiKey" placeholder="Cole sua Gemini API Key aqui">
+        <textarea id="desc" rows="2" placeholder="Descreva a planta aqui (ex.: folhas opostas, flores brancas pequenas)"></textarea>
         
         <div class="actions" id="acts">
-          <button class="ghost" id="again" type="button">Nova foto</button>
+          <button class="ghost" id="again" type="button">Limpar foto</button>
           <button class="go" id="scan" type="button">Escanear planta</button>
         </div>
       </div>
@@ -222,13 +218,10 @@ const LIST=DB.map((w,i)=>i+': '+w.n+' — '+w.k[0]+' ('+w.f+'). '+w.d).join('\n'
 let files=[], maxImgs=4;
 const SLOT_LABEL=['Planta toda','Folha de perto','Flor ou fruto','Extra'];
 
-// Restaura chave salva
 if(localStorage.getItem('gemini_api_key')){
   $('apiKey').value = localStorage.getItem('gemini_api_key');
 }
 $('apiKey').onchange = () => localStorage.setItem('gemini_api_key',$('apiKey').value.trim());
-
-const note=m=>{$('note').textContent=m;$('note').hidden=!m};
 
 function renderThumbs(){
   $('preview').src=files[0]?URL.createObjectURL(files[0]):'';
@@ -262,7 +255,7 @@ $('fileMore').onchange=e=>{
 };
 
 $('again').onclick=()=>{
-  files=[];$('file').value='';renderThumbs();$('out').innerHTML='';$('file').click();
+  files=[];$('file').value='';renderThumbs();$('out').innerHTML='';
 };
 
 function fileToBase64(file){
@@ -307,13 +300,13 @@ const busy=b=>{$('vf').classList.toggle('scanning',b);$('scan').disabled=$('agai
 $('scan').onclick=async()=>{
   const key = $('apiKey').value.trim();
   if(!key){
-    err('Por favor, informe uma Gemini API Key válida para utilizar a inteligência artificial.');
+    err('Por favor, insira a sua Gemini API Key no campo abaixo para realizar o escaneamento.');
     return;
   }
 
   const d=$('desc').value.trim();
-  if(!files.length && d.length<8){
-    err('Insira pelo menos uma foto ou descreva a planta detalhadamente.');
+  if(!files.length && d.length<5){
+    err('Adicione uma fotografia ou descreva as características da planta na caixa de texto.');
     return;
   }
 
@@ -321,13 +314,13 @@ $('scan').onclick=async()=>{
 ${files.length ? 'A(s) imagem(ns) anexa(s) mostram a mesma planta de ângulos diferentes.' : ''}
 ${d ? 'Observação do usuário: "' + d + '"' : ''}
 
-Examine com atenção o formato e a disposição das folhas, a cor e o formato das flores ou frutos, e o hábito de crescimento (rasteiro, ereto ou trepador) antes de decidir.
-Espécies possíveis — escolha SOMENTE entre estas, comparando com a descrição de cada uma:
+Examine com atenção o formato e a disposição das folhas, a cor e o formato das flores ou frutos, e o hábito de crescimento antes de decidir.
+Espécies possíveis — escolha SOMENTE entre estas:
 ${LIST}
 
 Responda SOMENTE com JSON sem marcadores de código Markdown e sem texto fora do JSON:
-{"candidatas":[{"id":<número da lista>,"confianca":<0 a 100, sua certeza real>}],"observacao":"<1 frase: o traço decisivo que te fez escolher, ou por que está incerto>","foto_sugerida":"<se a confiança for baixa ou houver 2+ espécies parecidas, diga qual foto ajudaria; senão, string vazia>"}
-No máximo 3 candidatas, da mais para a menos provável. Seja conservador na "confianca": só passe de 70 se as imagens/informações realmente mostrarem com clareza os traços decisivos da espécie. Nunca infle o número. Se não corresponder a nenhuma da lista, deixe "candidatas" vazia.`;
+{"candidatas":[{"id":<número da lista>,"confianca":<0 a 100, sua certeza real>}],"observacao":"<1 frase: o traço decisivo que te fez escolher, ou por que está incerto>","foto_sugerida":"<se a confiança for baixa, diga qual foto ajudaria; senão, string vazia>"}
+No máximo 3 candidatas. Seja conservador na confiança.`;
 
   busy(true);
 
@@ -352,7 +345,7 @@ No máximo 3 candidatas, da mais para a menos provável. Seja conservador na "co
 
     const resData = await response.json();
     if(!response.ok){
-      throw new Error(resData.error?.message || 'Erro ao conectar à API do Gemini.');
+      throw new Error(resData.error?.message || 'Erro de comunicação com a API.');
     }
 
     let textResponse = resData.candidates[0].content.parts[0].text.trim();
@@ -362,7 +355,7 @@ No máximo 3 candidatas, da mais para a menos provável. Seja conservador na "co
     show(parsed);
 
   }catch(e){
-    err('Falha na identificação: ' + e.message);
+    err('Erro na análise: ' + e.message);
   }finally{
     busy(false);
   }
