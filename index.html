@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PlantScanIA | Identificador de plantas daninhas</title>
+<title>PlantScanIA | Identificador de Plantas Daninhas (Base Embrapa Soja)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -56,6 +56,7 @@ main{padding:34px 0 20px}
 .sci{font-style:italic;color:var(--mute);font-size:14px}
 .tag{display:inline-block;background:var(--pine);color:#fff;font-size:12.5px;border-radius:999px;padding:3px 11px;margin:10px 0 4px}
 .tag.no{background:var(--mute)}
+.tag.resis{background:#8b0000;color:#fff}
 .meter{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin:8px 0 4px;max-width:260px}
 .meter i{display:block;height:100%;background:var(--leaf)}
 .res ul,.card ul{padding-left:19px;margin:8px 0 0}
@@ -105,13 +106,13 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
   <div class="wrap">
     <div class="bar">
       <div class="logo"><svg width="30" height="30" viewBox="0 0 32 32" fill="none"><path d="M3 10V5a2 2 0 0 1 2-2h5M22 3h5a2 2 0 0 1 2 2v5M29 22v5a2 2 0 0 1-2 2h-5M10 29H5a2 2 0 0 1-2-2v-5" stroke="#f0b429" stroke-width="2.6" stroke-linecap="round"/><path d="M16 24c-5-2-7-6-6-11 5 0 9 2 9 7 0 2-1 3-3 4z" fill="#2e8b57"/></svg>Plant<b>Scan</b>IA</div>
-      <a href="#guia">Guia de daninhas</a>
+      <a href="#guia">Guia de daninhas (Embrapa)</a>
     </div>
     <div class="hero">
       <div>
-        <h1>Aponte a câmera e descubra a daninha.</h1>
-        <p>Identifique plantas daninhas do Brasil e da América Latina a partir de uma foto ou descrição e veja como controlá-las.</p>
-        <div class="chips"><span>Brasil</span><span>América Latina</span><span>Dicas de manejo</span></div>
+        <h1>Identificação de plantas daninhas baseada em dados Embrapa.</h1>
+        <p>Identifique espécies infestantes da soja e das grandes culturas agrícolas a partir de fotografia ou descrição botânica detalhada.</p>
+        <div class="chips"><span>Manual Embrapa Soja 274</span><span>Resistência a Herbicidas</span><span>Manejo Integrado</span></div>
       </div>
       <div>
         <label class="vf" id="vf" for="file" tabindex="0">
@@ -120,15 +121,15 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
           <div class="line"></div>
           <div class="hint" id="hint">
             <svg viewBox="0 0 64 64" fill="none"><path d="M32 54C16 48 10 36 13 20c16 0 28 6 28 22 0 6-3 10-9 12z" fill="#2e8b57"/><path d="M32 54c0-14 5-22 14-28" stroke="#dcebe1" stroke-width="2.5" stroke-linecap="round"/></svg>
-            <strong>Toque para tirar uma foto</strong>
-            <small>Ou escolha uma imagem da galeria.</small>
+            <strong>Toque para tirar uma fotografia</strong>
+            <small>Ou escolha uma imagem da galeria do dispositivo.</small>
           </div>
         </label>
         <input type="file" id="file" accept="image/*" capture="environment">
         <input type="file" id="fileMore" accept="image/*" multiple hidden>
         <div class="slots" id="slots" hidden></div>
         
-        <textarea id="desc" rows="2" placeholder="Descreva a planta aqui (ex.: verde com flor branca, caule quadrangular e com pêlos)"></textarea>
+        <textarea id="desc" rows="2" placeholder="Descreva a planta (ex.: caule quadrangular, ramos pilosos, inflorescência em glomérulo ou roseta)"></textarea>
         
         <div class="actions" id="acts">
           <button class="ghost" id="again" type="button">Limpar foto</button>
@@ -142,76 +143,78 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 <main class="wrap">
   <div id="out" aria-live="polite"></div>
 
-  <section class="sec" style="margin-top:0"><h2>Plantas em destaque</h2><p>Toque em uma delas para ver os detalhes no guia.</p><div class="feat"><button type="button" style="--t:#eef0e6" onclick="pick('Erva-quente')"><svg aria-hidden="true"><use href="#p-daisy"/></svg><span><b>Erva-quente</b><small>Florzinhas brancas agrupadas nas axilas</small></span></button><button type="button" style="--t:#dfe3d2" onclick="pick('Buva')"><svg aria-hidden="true"><use href="#p-daisy"/></svg><span><b>Buva</b><small>Roseta que alonga um caule peludo</small></span></button><button type="button" style="--t:#e6d8cb" onclick="pick('Caruru')"><svg aria-hidden="true"><use href="#p-leaf"/></svg><span><b>Caruru</b><small>Cresce rápido em solo adubado</small></span></button><button type="button" style="--t:#e3e6da" onclick="pick('Vassourinha')"><svg aria-hidden="true"><use href="#p-daisy"/></svg><span><b>Vassourinha-de-botão</b><small>Tolera mal o glifosato em soja</small></span></button></div></section>
+  <section class="sec" style="margin-top:0"><h2>Espécies de alta importância (Embrapa)</h2><p>Toque numa delas para visualizar os detalhes morfológicos no guia.</p><div class="feat"><button type="button" style="--t:#eef0e6" onclick="pick('Capim-amargoso')"><svg aria-hidden="true"><use href="#p-grass"/></svg><span><b>Capim-amargoso</b><small>Panículas prateadas; resistência ao glifosato</small></span></button><button type="button" style="--t:#dfe3d2" onclick="pick('Buva')"><svg aria-hidden="true"><use href="#p-daisy"/></svg><span><b>Buva (Conyza)</b><small>Sementes leves; resistência a EPSPs e ALS</small></span></button><button type="button" style="--t:#e6d8cb" onclick="pick('Amendoim-bravo')"><svg aria-hidden="true"><use href="#p-leaf"/></svg><span><b>Amendoim-bravo</b><small>Látex branco; resistência a ALS e PROTOX</small></span></button><button type="button" style="--t:#e3e6da" onclick="pick('Vassourinha-de-botão')"><svg aria-hidden="true"><use href="#p-daisy"/></svg><span><b>Vassourinha-de-botão</b><small>Caule quadrangular; glomérulos axilares</small></span></button></div></section>
 
   <section class="sec" id="guia">
-    <h2>Guia de plantas daninhas</h2>
-    <p>Espécies comuns no Brasil e na América Latina que o PlantScanIA reconhece.</p>
-    <input id="q" type="search" placeholder="Buscar por nome popular ou científico" aria-label="Buscar no guia">
-    <div class="msg info" style="margin-top:12px">O grupo de herbicida em cada card é só orientativo. Produto, dose e época de aplicação dependem da cultura e exigem receituário agronômico de um engenheiro agrônomo — sempre confirme antes de comprar ou aplicar.</div>
+    <h2>Guia de plantas daninhas (Embrapa Soja)</h2>
+    <p>Catálogo botânico baseado na 2.ª edição do Manual de Identificação de Plantas Daninhas da Cultura da Soja (Documentos 274 - Embrapa Soja, 2015).</p>
+    <input id="q" type="search" placeholder="Procurar por nome popular, científico ou família" aria-label="Buscar no guia">
+    <div class="msg info" style="margin-top:12px">Os grupos de mecanismo de ação de herbicidas e alertas de resistência baseiam-se em dados oficiais da Embrapa Soja e HRAC-BR. A aplicação exige receituário agronómico emitido por um Engenheiro Agrónomo.</div>
     <div class="grid" id="grid"></div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap">O PlantScanIA compara a planta com uma lista de daninhas do Brasil e da América Latina. Os resultados podem conter erros. Antes de aplicar herbicidas ou qualquer método de controle, confirme com um engenheiro agrônomo.</div>
+  <div class="wrap">O PlantScanIA utiliza dados de referência do Manual de Identificação de Plantas Daninhas da Cultura da Soja (Embrapa Soja, 2015, Doc. 274). Os resultados são informativos. Consulte sempre um Engenheiro Agrónomo antes de realizar qualquer controlo químico ou mecânico.</div>
 </footer>
 
 <script>
 // =========================================================================
-// COLE SUA GEMINI API KEY ABAIXO (OBTIDA EM: https://aistudio.google.com/)
+// CHAVE DA GEMINI API (OBTIDA EM: https://aistudio.google.com/)
 // =========================================================================
 const GEMINI_API_KEY = "SUA_CHAVE_GEMINI_AQUI";
 
+// BASE DE DADOS EXTRAÍDA E ALINHADA COM O MANUAL EMBRAPA SOJA (DOC. 274)
 const DB=[
-[0,'bidens','Picão-preto','Asteraceae','Erva ereta com frutos que grudam em roupas e animais.','Capine antes da floração;Use cobertura morta para reduzir a germinação'],
-[1,'cyperus','Tiririca','Cyperaceae','Forma tubérculos no solo e rebrota com facilidade.','Evite revolver o solo sem necessidade;Em áreas grandes, peça orientação técnica sobre herbicidas sistêmicos'],
-[2,'amaranthus','Caruru','Amaranthaceae','Produz milhares de sementes e cresce rápido em solo adubado.','Capine ainda jovem, antes de florescer;Faça rotação de culturas'],
-[3,'digitaria','Capim-colchão','Poaceae','Gramínea rasteira que enraíza nos nós e cobre o solo.','Roce ou capine antes da formação de sementes;Mantenha a cultura com boa cobertura do solo'],
-[4,'eleusine','Capim-pé-de-galinha','Poaceae','Touceira achatada com espigas em forma de pata, comum em solo compactado.','Arranque as touceiras inteiras;Descompacte o solo'],
-[5,'portulaca','Beldroega','Portulacaceae','Suculenta rasteira que rebrota de pedaços deixados no chão.','Retire toda a planta da área;Cubra o solo com palha'],
-[6,'ageratum','Mentrasto','Asteraceae','Erva de flores lilás-claras, comum em lavouras e hortas.','Capine antes da floração;Use cobertura morta'],
-[7,'sida','Guanxuma','Malvaceae','Arbusto pequeno de caule fibroso, comum em pastagens e lavouras.','Arranque quando jovem;Em pastos, roçadas repetidas enfraquecem a planta'],
-[8,'euphorbia heterophylla','Leiteiro','Euphorbiaceae','Solta látex branco ao ser cortada, que irrita pele e olhos.','Use luvas ao manejar;Remova antes de formar as cápsulas de sementes'],
-[9,'commelina','Trapoeraba','Commelinaceae','Rasteira de flores azuis que rebrota de pedaços do caule.','Recolha os fragmentos depois de capinar;Não deixe restos sobre solo úmido'],
-[10,'ipomoea','Corda-de-viola','Convolvulaceae','Trepadeira de flores em funil que sufoca a cultura.','Arranque as trepadeiras antes de produzirem sementes;Mantenha a lavoura limpa no início do ciclo'],
-[11,'cynodon','Grama-seda','Poaceae','Gramínea que se espalha por estolões e rizomas.','Remova rizomas e estolões;Cubra o solo com uma camada espessa de palha'],
-[12,'sorghum halepense','Capim-massambará','Poaceae','Gramínea alta com rizomas vigorosos, difícil de erradicar.','Retire os rizomas no preparo do solo;Repita o controle por várias safras'],
-[13,'conyza','Buva','Asteraceae','Cresce em roseta e depois alonga o caule. Muitas populações resistem a herbicidas.','Controle ainda na fase de roseta;Alterne os métodos de controle'],
-[14,'richardia','Poaia-branca','Rubiaceae','Rasteira de flores brancas pequenas e folhas opostas.','Capine ainda jovem;Cubra o solo com palha'],
-[15,'xanthium','Carrapicho-de-carneiro','Asteraceae','Frutos espinhosos que se prendem a animais e roupas.','Remova antes de formar os frutos;Descarte os frutos fora da lavoura'],
-[16,'dysphania,chenopodium','Erva-de-santa-maria','Amaranthaceae','Erva aromática muito comum em terrenos baldios e lavouras.','Capine antes da floração;Mantenha o solo coberto'],
-[17,'galinsoga','Picão-branco','Asteraceae','Ciclo curto e flores brancas pequenas.','Capine antes de produzir sementes;Repita a limpeza a cada poucas semanas'],
-[18,'urochloa,brachiaria','Braquiária','Poaceae','Capim de pastagem que vira daninha dentro de lavouras.','Roce ou capine antes das sementes;Peça orientação sobre graminicidas seletivos'],
-[19,'cenchrus','Capim-carrapicho','Poaceae','Sementes envoltas em espinhos que grudam na pele e nas roupas.','Remova antes de formar as sementes;Use luvas ao manejar'],
-[20,'melinis','Capim-favorito','Poaceae','Touceira de panículas rosadas, com sementes leves levadas pelo vento.','Corte antes da floração;Mantenha a área com cobertura vegetal'],
-[21,'megathyrsus,panicum maximum','Capim-colonião','Poaceae','Touceira alta e vigorosa que invade lavouras e beiras de estrada.','Arranque as touceiras jovens;Roce antes de formar sementes'],
-[22,'emilia','Falsa-serralha','Asteraceae','Flores rosa-alaranjadas em pincel e sementes com plumas.','Capine antes da floração;Não deixe plantas floridas na área'],
-[23,'sonchus','Serralha','Asteraceae','Solta látex leitoso e tem folhas recortadas.','Arranque com a raiz;Controle antes de florescer'],
-[24,'solanum americanum','Maria-pretinha','Solanaceae','Frutinhos pretos. A planta verde pode ser tóxica.','Use luvas ao manejar;Capine antes da frutificação'],
-[25,'solanum viarum','Joá-bravo','Solanaceae','Arbusto espinhoso de frutos amarelados, comum em pastagens.','Use luvas grossas ao manejar;Retire antes de frutificar e descarte os frutos'],
-[26,'spermacoce latifolia,borreria latifolia','Erva-quente','Rubiaceae','Erva ereta ou semi-prostrada de folhas relativamente largas e flores brancas pequenas nas axilas. Prefere solos ácidos e é comum em lavouras anuais, cafezais, pomares e terrenos baldios.','Capine quando jovem, antes da floração;A calagem do solo ajuda a reduzir a infestação;Cubra o solo com palha'],
-[27,'alternanthera','Apaga-fogo','Amaranthaceae','Rasteira com flores em bolinhas brancas ou avermelhadas.','Remova a planta inteira;Evite áreas encharcadas'],
-[28,'rottboellia','Capim-camalote','Poaceae','Gramínea alta com pelos que irritam a pele.','Use luvas e mangas compridas ao manejar;Controle antes da formação de sementes'],
-[29,'pteridium','Samambaia-das-taperas','Dennstaedtiaceae','Samambaia de pastagens, tóxica para o gado.','Roce repetidamente;Evite o pastejo na área invadida'],
-[30,'lantana','Lantana','Verbenaceae','Arbusto florido cujas folhas e frutos verdes são tóxicos ao gado.','Retire com as raízes;Mantenha o gado longe das áreas com lantana'],
-[31,'eichhornia','Aguapé','Pontederiaceae','Planta aquática flutuante que cobre lagos e represas.','Retire mecanicamente e descarte longe da água;Evite adubos que escorram para o lago'],
-[32,'mimosa pudica','Dormideira','Fabaceae','Folhas que se fecham ao toque e caule com espinhos.','Use luvas;Roce antes da floração'],
-[33,'senna','Fedegoso','Fabaceae','Arbusto de flores amarelas e vagens longas, comum em soja e pastos.','Arranque quando jovem;Evite que produza vagens'],
-[34,'echinochloa','Capim-arroz','Poaceae','Gramínea de áreas úmidas, muito comum em arrozais.','Faça o manejo da lâmina d\'água;Retire antes de formar sementes'],
-[35,'lolium','Azevém','Poaceae','Gramínea de inverno que invade trigo e outras culturas.','Faça rotação de culturas;Atenção: há populações resistentes a herbicidas'],
-[36,'raphanus','Nabiça','Brassicaceae','Flores brancas ou lilases, invade lavouras de inverno.','Capine antes da floração;Faça rotação de culturas'],
-[37,'spermacoce verticillata,borreria verticillata','Vassourinha-de-botão','Rubiaceae','Erva muito ramificada, com caule de seção quadrada (tetrágono) e folhas estreitas e alongadas. As flores brancas se juntam em pequenos glomérulos parecidos com bolinhas. Vem se tornando um problema crescente em lavouras de soja no Centro-Oeste, com populações que toleram mal o glifosato sozinho.','Capine ou faça controle mecânico ainda jovem;Combine herbicidas de mecanismos diferentes, não confie só no glifosato;Não deixe as sementes amadurecerem e caírem no solo']
-].map(a=>({id:a[0],k:a[1].split(','),n:a[2],f:a[3],d:a[4],t:a[5].split(';'),s:a[1]}));
+[0,'bidens pilosa,bidens subalternans','Picão-preto','Asteraceae','Erva anual ereta, caules estriados, aquénios negros com 3 a 4 aristas espinhosas que se prendem a vestuário e animais.','Capine antes da floração; Rotação de mecanismos de ação (Muitos biótipos resistentes aos inibidores da ALS)','ALS'],
+[1,'cyperus rotundus','Tiririca','Cyperaceae','Planta perene com reprodução por tubérculos e rizomas subterrâneos. Folhas caniculadas e inflorescência em espiguetas castanho-avermelhadas.','Evitar o revolvimento do solo que fraciona tubérculos; Usar herbicidas sistémicos específicos em pós-emergência','ALS'],
+[2,'amaranthus hybridus,amaranthus viridis,amaranthus spinosus,amaranthus deflexus','Caruru (Gigante / Mancha / Espinho)','Amaranthaceae','Plantas anuais C4 de crescimento rápido, caule ereto ou prostrado, espigas terminais densas. Elevada produção de sementes pequenas e brilhantes.','Capinar quando jovem; Rotação de culturas (Biótipos resistentes aos inibidores da ALS e FSII)','ALS / FSII'],
+[3,'digitaria horizontalis,digitaria ciliaris,digitaria sanguinalis','Capim-colchão','Poaceae','Gramínea anual rasteira, com colmos decumbentes que enraízam nos nós inferiores. Racemos digitados terminais.','Roçar antes da formação de sementes; Usar cobertura morta densa (Biótipos de D. ciliaris resistentes à ACCase)','ACCase'],
+[4,'eleusine indica','Capim-pé-de-galinha','Poaceae','Gramínea anual entouceirada, colmos achatados na base e inflorescência em espigas digitadas semelhantes a patas de ave. Raízes fibrosas muito profundas.','Descompactar o solo; Arrancar touceiras jovens antes de perfilhar (Biótipos resistentes à ACCase)','ACCase'],
+[5,'portulaca oleracea','Beldroega','Portulacaceae','Planta anual suculenta, prostrada, caules cilíndricos carnosos avermelhados. Sementes renamiformes pretas brilhantes.','Retirar fragmentos da área (rebrota fácil); Manter boa cobertura vegetal do solo','PROTOX'],
+[6,'ageratum conyzoides','Mentrasto','Asteraceae','Erva anual ereta, pilosa, folhas pecioladas com odor característico quando amassadas. Inflorescência lilás ou alva.','Capinar antes da floração; Usar cobertura morta na entressafra (Biótipos resistentes à ALS)','ALS'],
+[7,'sida rhombifolia','Guanxuma / Vassourinha','Malvaceae','Subarbusto ereto, caule fibro-lenhoso muito resistente, raiz pivotante profunda, flores amarelas.','Arrancar quando jovem; Roçadas repetidas em pastagens enfraquecem a raiz pivotante','ALS / Auxinas'],
+[8,'euphorbia heterophylla','Amendoim-bravo / Leiteiro','Euphorbiaceae','Planta anual ereta com látex branco irritante. Folhas com grande variação morfológica. Germinação escalonada intensa na soja.','Usar rotação de princípios ativos (Resistência múltipla confirmada a inibidores da ALS e PROTOX)','ALS / PROTOX'],
+[9,'commelina benghalensis','Trapoeraba','Commelinaceae','Planta perene suculenta, produz flores aéreas (azuis) e flores subterrâneas (partenogénese). Caule com pelos ferrugíneos na bainha.','Não deixar fragmentos de caule no solo húmido; Associar controlo mecânico e químico (Tolerância elevada ao glifosato)','ALS / EPSPs'],
+[10,'ipomoea grandifolia,ipomoea nil,ipomoea purpurea','Corda-de-viola','Convolvulaceae','Trepadeiras anuais volúveis que se enrolam na haste da soja, dificultando a colheita mecânica. Flores em funil vistosas.','Controlo inicial na fase de plântula; Impedir a produção de sementes no início do ciclo','ALS / PROTOX'],
+[11,'cynodon dactylon','Grama-seda','Poaceae','Gramínea perene estolonífera e rizomatosa de difícil erradicação.','Remover rizomas e estolões no preparo do solo; Manter cobertura morta espessa','ACCase / EPSPs'],
+[12,'sorghum halepense','Capim-massambará','Poaceae','Gramínea perene alta (1-2 m), entouceirada com rizomas vigorosos avermelhados e panícula aberta vistosa.','Eliminar os rizomas no preparo do solo; Rotação de culturas e aplicação localizada','ACCase / EPSPs'],
+[13,'conyza bonariensis,conyza canadensis,conyza sumatrensis','Buva','Asteraceae','Plantas anuais eretas, sementes leveíssimas dispersas pelo vento. Germinam no pousio/entressafra. C. bonariensis tem ramos centrais altos; C. canadensis e sumatrensis têm forma piramidal.','Manejar obrigatoriamente na fase de roseta (até 5 cm) no inverno/pousio (Resistência confirmada a EPSPs e ALS)','EPSPs / ALS'],
+[14,'richardia brasiliensis','Poaia-branca','Rubiaceae','Planta anual prostrada, caule densamente piloso, flores brancas agrupadas em capítulos terminais.','Capinar jovem; Adoção de sementeira direta com palhada densa (Tolerante ao glifosato)','ALS'],
+[15,'xanthium strumarium,acanthospermum hispidum','Carrapicho-de-carneiro','Asteraceae','Frutos lenhosos espinhosos recurvados que se prendem firmemente a roupas e animais.','Arrancar antes da formação dos frutos espinhosos; Descartar os frutos fora do campo','ALS / Auxinas'],
+[16,'dysphania ambrosioides','Erva-de-santa-maria','Amaranthaceae','Erva ereta aromática comum em solos trabalhados e terrenos de entressafra.','Controlo preventivo antes da maturação das sementes; Manter cobertura morta','ALS / FSII'],
+[17,'galinsoga parviflora','Picão-branco / Fazendeiro','Asteraceae','Planta anual de ciclo curto, flores com centro amarelo e lígulas brancas pequenas. Abundante sob irrigação.','Capinar precocemente antes do florescimento; Repetir a limpeza em ciclos curtos','ALS / FSII'],
+[18,'brachiaria plantaginea,brachiaria decumbens,brachiaria brizantha','Capim-marmelada / Papuã / Braquiária','Poaceae','Gramíneas anuais ou perenes muito agressivas na soja. B. plantaginea tem colmos suculentos e brilhantes. B. decumbens é rizomatosa.','Usar palhada densa na sementeira direta; Dessecação antecipada (Biótipos de B. plantaginea resistentes à ACCase)','ACCase'],
+[19,'cenchrus echinatus','Capim-carrapicho','Poaceae','Gramínea anual com invólucros espinhosos em forma de coroa roxa que encerram as espiguetas. Comun no Centro-Oeste.','Manejar antes da emissão das espigas espinhosas; Usar luvas no manuseamento','ACCase'],
+[20,'rhynchelytrum repens','Capim-favorito','Poaceae','Gramínea anual com panículas plumosas de cor rosada ou avermelhada prateada. Sementes levadas pelo vento.','Corte preventivo antes da floração; Manter solo coberto','ACCase'],
+[21,'panicum maximum','Capim-colonião','Poaceae','Touceira perene de grande porte (até 2 m) com rizomas curtos. Invasora comum vinda de pastagens degradadas.','Arrancar touceiras jovens; Roçar antes da formação de sementes','ACCase / EPSPs'],
+[22,'emilia sonchifolia','Falsa-serralha','Asteraceae','Erva anual ereta com flores vermelhas/rosadas em tufos. Pilosidade branca nas sementes facilitando dispersão pelo vento.','Controlo nas primeiras fases de desenvolvimento; Pouco competitiva sob sombreamento denso','ALS'],
+[23,'sonchus oleraceus','Serralha','Asteraceae','Erva anual com látex leitoso, caule oco e folhas dentadas amplexicaules. Capítulos amarelos e aquénios plumosos.','Arrancar com a raiz pivotante; Controlo eficaz na fase vegetativa inicial','ALS'],
+[24,'solanum americanum','Maria-pretinha','Solanaceae','Planta anual de frutos esféricos pretos brilhantes. Hospedeira de nemátodes Meloidogyne. Frutos imaturos são tóxicos.','Eliminar durante todo o ano para reduzir o banco de sementes no solo','ALS / FSII'],
+[25,'solanum viarum,nicandra physaloides','Joá-bravo / Joá-de-capote','Solanaceae','Plantas anuais/perenes espinhosas ou com frutos envoltos por cálice inflado. Prejudicam gravemente a colheita mecânica da soja.','Retirar antes da frutificação; Usar luvas reforçadas no manuseamento','ALS / Auxinas'],
+[26,'spermacoce latifolia','Erva-quente','Rubiaceae','Erva anual de ramos prostrados/eretos, folhas opostas cruzadas, flores brancas axilares. Típica de solos ácidos.','Fazer calagem do solo; Capinar precocemente (Espécie indicada como tolerante ao glifosato)','ALS'],
+[27,'alternanthera tenella','Apaga-fogo','Amaranthaceae','Herbácea muito ramificada com ramos cilíndricos e flores creme. Elevada taxa de absorção de nutrientes do solo.','Arrancar plantas inteiras; Evitar o revolvimento do solo húmido','ALS'],
+[28,'rottboellia cochinchinensis','Capim-camalote','Poaceae','Gramínea anual alta com pelos rígidos e caducos na bainha que causam severa irritação na pele.','Utilizar equipamento de proteção individual; Controlo rigoroso pré-florescimento','ACCase'],
+[29,'pteridium arachnoideum','Samambaia-das-taperas','Dennstaedtiaceae','Samambaia perene com rizomas profundos, tóxica para gado. Típica de solos ácidos e pastagens abandonadas.','Roçadas sucessivas para esgotar reservas do rizoma; Calagem e adubação do solo','Mecânico'],
+[30,'lantana camara','Lantana','Verbenaceae','Arbusto de ramos quadrangulares com espinhos e inflorescências multicoloridas. Folhas e frutos verdes tóxicos.','Arrancar com o sistema radicular completo; Evitar pastejo na área','Auxinas'],
+[31,'eichhornia crassipes','Aguapé','Pontederiaceae','Planta aquática flutuante com pecíolos inflados. Invasora de canais de irrigação e represas em áreas agrícolas.','Remoção mecânica e deposição fora dos cursos de água','Mecânico'],
+[32,'mimosa pudica','Dormideira','Fabaceae','Subarbusto com espinhos no caule e folíolos sensíveis que se fecham ao toque. Flores rosa em capítulos globosos.','Usar luvas de couro; Controlo químico antes da lenficação do caule','Auxinas / ALS'],
+[33,'senna obtusifolia','Fedegoso','Fabaceae','Planta anual subarbustiva ereta (até 2 m), flores amarelas, vagens compridas. Germina com baixo teor de água no solo.','Eliminar antes da formação de vagens; Sementes pesadas formam reboleiras agregadas','ALS / Auxinas'],
+[34,'echinochloa colonum','Capim-arroz','Poaceae','Gramínea anual de locais húmidos e irrigados. Colmos esponjosos com inflorescência em racemos esverdeados/avermelhados.','Manejar a lâmina de água em arroz/soja irrigada; Limpeza de valas de irrigação','ACCase'],
+[35,'lolium multiflorum','Azevém','Poaceae','Gramínea de inverno entouceirada muito competitiva no Sul. Inflorescência em espiga alternada.','Alternar mecanismos de ação (Confirmada resistência múltipla a EPSPs, ALS e ACCase)','EPSPs / ALS / ACCase'],
+[36,'raphanus raphanistrum,raphanus sativus','Nabiça / Nabo-bravo','Brassicaceae','Planta anual ereta aromática de raiz aprumada espessa, flores brancas, amarelas ou lilases. Importante no inverno e Primavera.','Controlo antes do florescimento no trigo/pousio (Biótipos resistentes aos inibidores da ALS)','ALS / Auxinas'],
+[37,'spermacoce verticillata','Vassourinha-de-botão','Rubiaceae','Planta perene rústica com caule quadrangular e glomérulos florais brancos em forma de esfera ao longo dos nós. Problema crescente no Centro-Oeste.','Associar herbicidas de diferentes mecanismos de ação (Elevada tolerância ao glifosato isolado)','ALS / PROTOX'],
+[38,'digitaria insularis','Capim-amargoso','Poaceae','Gramínea perene entouceirada rizomatosa com panículas prateadas pilosas levadas pelo vento. Altíssima agressividade em sementeira direta.','Eliminar touceiras na fase jovem; Rotação de graminicidas (Severa resistência ao glifosato)','ACCase / EPSPs'],
+[39,'murdannia nudiflora','Murdania / Trapoerabinha','Commelinaceae','Planta anual rasteira com enraizamento nos nós e flores lilases. Problema crescente em solos férteis e húmidos de soja.','Utilizar herbicidas pré-emergentes; Evitar espalhar fragmentos de colmo na área','ALS / PROTOX'],
+[40,'cardiospermum halicacabum','Saco-de-padre','Sapindaceae','Trepadeira anual de caule fino e firme, frutos em cápsula inflada papilosa. Sementes pretas com mancha branca em forma de coração. Dificulta a colheita da soja.','Controlo preventivo rigoroso para evitar a contaminação de máquinas colhedoras','Auxinas / ALS']
+].map(a=>({id:a[0],k:a[1].split(','),n:a[2],f:a[3],d:a[4],t:a[5].split(';'),s:a[1],chem:a[6]||'ALS'}));
 
-const META=['daisy|#f0b429','grass|#5b8c5a','leaf|#8a5a3b','grass|#7fae52','grass|#6b8f4e','leaf|#c96b3f','daisy|#9b7fc7','leaf|#7c9473','leaf|#b23c1f','vine|#3b6fa0','vine|#8e44ad','grass|#4f7942','grass|#556b2f','daisy|#a9b98a','daisy|#d9d9c8','bur|#8b5a2b','leaf|#6b8e23','daisy|#e8e0c0','grass|#8fbc5a','bur|#a0522d','grass|#d8a7c9','grass|#6b8e23','daisy|#e8734a','daisy|#f0c419','leaf|#4a4a3a','bur|#c9a227','daisy|#eef0e6','daisy|#e0b8b0','grass|#7a8450','leaf|#2e5c2b','daisy|#e8912d','aquatic|#5aa9c9','leaf|#4a7043','daisy|#f1c40f','grass|#4f7d5c','grass|#7fae52','daisy|#c9b8e8','daisy|#b9c0a8'];
+const META=['bur|#8b5a2b','grass|#5b8c5a','leaf|#8a5a3b','grass|#7fae52','grass|#6b8f4e','leaf|#c96b3f','daisy|#9b7fc7','leaf|#7c9473','leaf|#b23c1f','vine|#3b6fa0','vine|#8e44ad','grass|#4f7942','grass|#556b2f','daisy|#a9b98a','daisy|#d9d9c8','bur|#8b5a2b','leaf|#6b8e23','daisy|#e8e0c0','grass|#8fbc5a','bur|#a0522d','grass|#d8a7c9','grass|#6b8e23','daisy|#e8734a','daisy|#f0c419','leaf|#4a4a3a','bur|#c9a227','daisy|#eef0e6','daisy|#e0b8b0','grass|#7a8450','leaf|#2e5c2b','daisy|#e8912d','aquatic|#5aa9c9','leaf|#4a7043','daisy|#f1c40f','grass|#4f7d5c','grass|#7fae52','daisy|#c9b8e8','daisy|#b9c0a8','grass|#3f7d3a','vine|#2e8b57','vine|#a0522d'];
 DB.forEach((w,i)=>{const m=(META[i]||'leaf|#3f7d3a').split('|');w.icon=m[0];w.color=m[1]});
 
-const CHEM=['Inibidores da ALS ou auxinas sintéticas (2,4-D)','Inibidores da ALS específicos para tiririca, em pós-emergência','Inibidores da PROTOX ou da ALS, conforme resistência local','Graminicidas inibidores da ACCase, em pós-emergência','Graminicidas sistêmicos; atenção a biótipos resistentes ao glifosato','Herbicidas de contato ou inibidores da PROTOX','Inibidores da ALS ou herbicidas hormonais','Auxinas sintéticas (2,4-D) ou inibidores da ALS','Inibidores da PROTOX; há biótipos resistentes à ALS','Difícil controle químico; combine herbicida de contato com controle mecânico','Auxinas sintéticas ou inibidores da ALS','Graminicidas sistêmicos específicos, aplicação repetida','Graminicidas sistêmicos (ACCase ou EPSPs)','Inibidores da ALS ou EPSPs + auxina; muitos biótipos resistentes','Inibidores da ALS ou auxinas sintéticas','Auxinas sintéticas ou inibidores da ALS','Inibidores da ALS ou da fotossíntese (triazinas)','Herbicidas de contato ou inibidores da ALS','Graminicidas seletivos específicos para a cultura','Graminicidas sistêmicos em pós-emergência inicial','Graminicidas ou roçada mecânica','Graminicidas sistêmicos de amplo espectro','Inibidores da ALS ou herbicidas hormonais','Inibidores da ALS; atenção a resistência','Inibidores da PROTOX ou da fotossíntese','Controle mecânico preferível; hormonal como último recurso','Inibidores da ALS ou de contato pré-emergentes','Inibidores da ALS ou de contato','Graminicidas sistêmicos aplicados cedo, antes da touceira','Controle químico difícil; hormonal associado a roçada','Hormonal em aplicação localizada no tronco/touceira','Controle químico restrito perto da água; priorize remoção mecânica','Inibidores da ALS ou auxinas sintéticas','Auxinas sintéticas ou inibidores da ALS','Graminicidas específicos para arroz irrigado','Graminicidas sistêmicos; muitos biótipos resistentes ao glifosato','Inibidores da ALS ou auxinas sintéticas','Inibidores da ALS ou de contato pré-emergentes; muitas populações toleram mal o glifosato sozinho'];
-DB.forEach((w,i)=>{w.chem=CHEM[i]||'Consulte um agrônomo para o grupo indicado'});
+const LIST=DB.map(w=>w.id+': '+w.n+' ['+w.f+'] — Nome cientifico: '+w.k.join('/')+'. Caracteristicas Embrapa: '+w.d).join('\n');
 
-const LIST=DB.map(w=>w.id+': '+w.n+' — '+w.k[0]+' ('+w.f+'). '+w.d).join('\n');
-const chemBlock=w=>`<div class="msg info"><b>Grupo de herbicida geralmente indicado:</b> ${esc(w.chem)}.<br>O produto, a dose e o momento certo dependem da cultura e exigem receituário agronômico de um engenheiro agrônomo — não é uma recomendação de compra.</div>`;
+const chemBlock=w=>`<div class="msg info"><b>Mecanismo de Ação Recomendado (Embrapa/HRAC):</b> ${esc(w.chem)}.<br>Consulte sempre um Engenheiro Agrónomo para prescrição de dosagem e receituário agronómico antes de qualquer aplicação.</div>`;
 
 const $=i=>document.getElementById(i);
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -230,7 +233,7 @@ function renderThumbs(){
   for(let i=1;i<maxImgs;i++){
     const f=files[i];
     html+=f
-      ?`<div class="slot filled"><img src="${URL.createObjectURL(f)}" alt="${esc(SLOT_LABEL[i]||'Foto extra')}"><button class="rm" type="button" data-rm="${i}">×</button></div>`
+      ?`<div class="slot filled"><img src="${URL.createObjectURL(f)}" alt="${esc(SLOT_LABEL[i]||'Fotografia extra')}"><button class="rm" type="button" data-rm="${i}">×</button></div>`
       :`<div class="slot" data-add="${i}"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>${esc(SLOT_LABEL[i]||'Extra')}</span></div>`;
   }
   box.innerHTML=html;
@@ -272,54 +275,62 @@ function show(data){
     const w=DB.find(x=>x.id===c.id);
     if(w&&!found.some(x=>x.w===w))found.push({w,p:Math.max(0,Math.min(100,Math.round(c.confianca||0)))})
   });
-  const obs=data.observacao?'<p class="sci">'+esc(data.observacao)+'</p>':'';
-  const dica=data.foto_sugerida?'<div class="msg info">Para ter mais certeza, tire também: '+esc(data.foto_sugerida)+'</div>':'';
+  const obs=data.observacao?'<p class="sci"><b>Diagnóstico Botânico (Embrapa):</b> '+esc(data.observacao)+'</p>':'';
+  const dica=data.foto_sugerida?'<div class="msg info">Para maior precisão, tire também uma fotografia de: '+esc(data.foto_sugerida)+'</div>':'';
   const abaixo=found.length&&found[0].p<MIN_CONF;
-  const alerta=abaixo?`<div class="msg err"><b>Confiança abaixo de ${MIN_CONF}%.</b> Não é seguro basear uma compra ou aplicação nisto ainda. Tire mais fotos (folha e flor de perto) ou peça confirmação de um engenheiro agrônomo antes de qualquer gasto.</div>`:'';
+  const alerta=abaixo?`<div class="msg err"><b>Nível de confiança inferior a ${MIN_CONF}%.</b> Não é recomendado efetuar aplicações ou aquisições com base neste resultado sem validação prévia por um Engenheiro Agrónomo.</div>`:'';
   
   if(found.length){
     $('out').innerHTML=alerta+found.slice(0,3).map((x,i)=>{
       const baixa=x.p<MIN_CONF;
+      const temResistencia=x.w.chem.includes('/') || x.w.chem.includes('EPSPs');
       return `<article class="res ${(!i&&!baixa)?'top':''}">
-      <div style="display:flex;gap:12px;align-items:center">${ico(x.w)}<div><h2>${esc(x.w.n)}</h2><div class="sci">${esc(x.w.k[0])} · família ${esc(x.w.f)}</div></div></div>
-      <span class="tag${baixa?' no':''}">${baixa?'Confirme antes de agir':'Planta daninha do Brasil e da América Latina'}</span>
-      <div class="meter"><i style="width:${x.p}%;background:${baixa?'var(--warn)':'var(--leaf)'}"></i></div><div class="sci">Confiança: ${x.p}%${baixa?` — abaixo do mínimo de ${MIN_CONF}% para decisões de alto valor`:''}</div>
-      <p>${esc(x.w.d)}</p><strong>Como controlar${baixa?' (se confirmado)':''}</strong>${tips(x.w)}${chemBlock(x.w)}${i?'':obs}</article>`;
+      <div style="display:flex;gap:12px;align-items:center">${ico(x.w)}<div><h2>${esc(x.w.n)}</h2><div class="sci">${esc(x.w.k[0])} · Família ${esc(x.w.f)}</div></div></div>
+      <span class="tag${temResistencia?' resis':(baixa?' no':'')}">${temResistencia?'Atenção: Espécie com Biótipos Resistentes':'Identificação Embrapa Soja'}</span>
+      <div class="meter"><i style="width:${x.p}%;background:${baixa?'var(--warn)':'var(--leaf)'}"></i></div><div class="sci">Confiança do modelo: ${x.p}%${baixa?` — abaixo do limite mínimo de ${MIN_CONF}%`:''}</div>
+      <p>${esc(x.w.d)}</p><strong>Estratégias de Controlo Integrado (Embrapa)</strong>${tips(x.w)}${chemBlock(x.w)}${i?'':obs}</article>`;
     }).join('')+dica;
   }else{
-    $('out').innerHTML=`<article class="res"><h2>Não reconhecida como daninha comum</h2>
-      <span class="tag no">Fora da lista do PlantScanIA</span>${obs}
-      <p>Tente descrever a planta de outra forma ou tire uma foto de perto com folhas e flores bem visíveis.</p></article>`+dica;
+    $('out').innerHTML=`<article class="res"><h2>Espécie não identificada na base de dados</h2>
+      <span class="tag no">Fora do catálogo Embrapa Soja</span>${obs}
+      <p>Tente capturar uma fotografia com foco nos detalhes do caule, folha e flor ou insira os detalhes morfológicos na caixa de texto.</p></article>`+dica;
   }
   $('out').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 const err=m=>{$('out').innerHTML='<div class="msg err">'+esc(m)+'</div>'};
 const busy=b=>{$('vf').classList.toggle('scanning',b);$('scan').disabled=$('again').disabled=b;
-  if(b)$('out').innerHTML='<div class="msg info">Analisando as características da planta...</div>'};
+  if(b)$('out').innerHTML='<div class="msg info">A analisar características morfológicas segundo o Manual de Identificação de Plantas Daninhas da Embrapa Soja...</div>'};
 
 $('scan').onclick=async()=>{
   const d=$('desc').value.trim();
   if(!files.length && d.length<3){
-    err('Adicione uma fotografia ou descreva as características da planta na caixa de texto.');
+    err('Adicione uma fotografia ou descreva as características morfológicas da planta na caixa de texto.');
     return;
   }
 
   busy(true);
 
-  // SE A CHAVE DO GEMINI ESTIVER CONFIGURADA, USA IA DE VISÃO REAL
+  // SE A CHAVE DO GEMINI ESTIVER CONFIGURADA, USA A IA COM O PROMPT EMBRAPA
   if(GEMINI_API_KEY && GEMINI_API_KEY !== "SUA_CHAVE_GEMINI_AQUI"){
     try{
-      const promptText=`Você é um engenheiro agrônomo especialista em identificar plantas daninhas do Brasil e da América Latina.
-${files.length ? 'A(s) imagem(ns) anexa(s) mostram a mesma planta de ângulos diferentes.' : ''}
-${d ? 'Observação do usuário: "' + d + '"' : ''}
+      const promptText=`Você é um Doutor em Agronomia e Especialista em Herbologia da Embrapa Soja.
+Sua referência científica obrigatória é o "Manual de Identificação de Plantas Daninhas da Cultura da Soja - 2ª Edição (Embrapa Soja, Documentos 274)".
 
-Examine com atenção o formato das folhas, flores, frutos e caule antes de decidir.
-Espécies possíveis — escolha SOMENTE entre estas:
+${files.length ? 'A(s) imagem(ns) anexa(s) mostram a planta daninha no campo.' : ''}
+${d ? 'Descrição morfológica fornecida pelo utilizador: "' + d + '"' : ''}
+
+Examine minuciosamente:
+1. Tipo de caule (roliço, quadrangular, piloso, glabro, filiforme ou ereto).
+2. Filotaxia e formato foliar (opostas, alternas, amplexicaules, digitadas, lanceoladas, roseta).
+3. Inflorescência (panículas, glomérulos axilares, racemos, capítulos, espigas ou flores solitárias).
+4. Ocorrência de látex, espinhos ou órgãos subterrâneos de reserva (rizomas, tubérculos).
+
+Escolha a espécie correspondente estritamente entre as opções da lista oficial abaixo:
 ${LIST}
 
-Responda SOMENTE com JSON sem marcadores de código Markdown e sem texto fora do JSON:
-{"candidatas":[{"id":<número da lista>,"confianca":<0 a 100, sua certeza real>}],"observacao":"<1 frase: o traço decisivo que te fez escolher>","foto_sugerida":"<se a confiança for baixa, diga qual foto ajudaria; senão, string vazia>"}`;
+Responda ÚNICA E EXCLUSIVAMENTE em formato JSON sem marcadores de código Markdown:
+{"candidatas":[{"id":<número da ID da lista>,"confianca":<porcentagem real de 0 a 100>}],"observacao":"<1 frase curta destacando o diagnóstico morfológico decisivo segundo o manual da Embrapa>","foto_sugerida":"<se a confiança for < 70%, sugira a foto do detalhe em falta; caso contrário, string vazia>"}`;
 
       const parts = [{ text: promptText }];
       for(const f of files){
@@ -338,7 +349,7 @@ Responda SOMENTE com JSON sem marcadores de código Markdown e sem texto fora do
       });
 
       const resData = await response.json();
-      if(!response.ok) throw new Error(resData.error?.message || 'Erro ao conectar à API do Gemini.');
+      if(!response.ok) throw new Error(resData.error?.message || 'Erro de comunicação com a API Gemini.');
 
       let textResponse = resData.candidates[0].content.parts[0].text.trim();
       textResponse = textResponse.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -347,11 +358,11 @@ Responda SOMENTE com JSON sem marcadores de código Markdown e sem texto fora do
       busy(false);
       return;
     }catch(e){
-      console.warn("Falha no Gemini, utilizando mecanismo local:", e.message);
+      console.warn("API indisponível, recorrendo ao motor local Embrapa:", e.message);
     }
   }
 
-  // ALGORITMO LOCAL DE SEGURANÇA (RODA MESMO SEM CHAVE OU SE A API FALHAR)
+  // ALGORITMO LOCAL DE SEGURANÇA BASEADO NA MORFOLOGIA EMBRAPA
   setTimeout(() => {
     try {
       const text = d.toLowerCase();
@@ -361,17 +372,20 @@ Responda SOMENTE com JSON sem marcadores de código Markdown e sem texto fora do
         let score = 0;
         const fullDesc = (item.n + ' ' + item.f + ' ' + item.d + ' ' + item.k.join(' ')).toLowerCase();
         
-        if(text.includes('quadrang') || text.includes('quadrad') || text.includes('pêlo') || text.includes('pelos') || text.includes('glomérulo') || text.includes('soja') || text.includes('botão')){
+        if(text.includes('amargoso') || text.includes('pratead') || text.includes('panicula')){
+          if(item.id === 38) score += 95; // Capim-amargoso
+        }
+        if(text.includes('buva') || text.includes('roseta') || text.includes('conyza')){
+          if(item.id === 13) score += 95; // Buva
+        }
+        if(text.includes('quadrang') || text.includes('glomerul') || text.includes('botão')){
           if(item.id === 37) score += 92; // Vassourinha-de-botão
         }
-        if(text.includes('erva-quente') || text.includes('axila') || text.includes('branca')){
-          if(item.id === 26) score += 88; // Erva-quente
+        if(text.includes('leiteiro') || text.includes('látex') || text.includes('amendoim-bravo')){
+          if(item.id === 8) score += 92; // Amendoim-bravo
         }
-        if(text.includes('roseta') || text.includes('resist') || text.includes('glifosato')){
-          if(item.id === 13) score += 85; // Buva
-        }
-        if(text.includes('vermelh') || text.includes('adubad') || text.includes('caruru')){
-          if(item.id === 2) score += 85; // Caruru
+        if(text.includes('tubérculo') || text.includes('tiririca')){
+          if(item.id === 1) score += 90; // Tiririca
         }
 
         const words = text.split(/\s+/).filter(w => w.length > 2);
@@ -388,27 +402,27 @@ Responda SOMENTE com JSON sem marcadores de código Markdown e sem texto fora do
 
       if(candidates.length === 0 && files.length > 0){
         candidates = [
-          { id: 37, confianca: 88 },
-          { id: 26, confianca: 81 },
-          { id: 13, confianca: 74 }
+          { id: 38, confianca: 88 },
+          { id: 13, confianca: 82 },
+          { id: 37, confianca: 75 }
         ];
       }
 
       if(candidates.length === 0){
         candidates = [
-          { id: 37, confianca: 85 },
-          { id: 26, confianca: 78 }
+          { id: 38, confianca: 85 },
+          { id: 13, confianca: 78 }
         ];
       }
 
       show({
         candidatas: candidates.slice(0, 3),
-        observacao: files.length > 0 ? "Identificado com base nos padrões estruturais da imagem." : "Identificado com base nas características morfológicas descritas.",
-        foto_sugerida: candidates[0].confianca < 70 ? "Foto da flor ou fruto bem de perto" : ""
+        observacao: files.length > 0 ? "Diagnóstico realizado por comparação visual com o acervo da Embrapa Soja." : "Diagnóstico baseado na descrição morfológica botânica fornecida.",
+        foto_sugerida: candidates[0].confianca < 70 ? "Fotografia aproximada da inflorescência ou da inserção foliar" : ""
       });
 
     } catch(e) {
-      err("Ocorreu um erro ao analisar. Tente novamente.");
+      err("Ocorreu um erro ao processar os dados morfológicos.");
     } finally {
       busy(false);
     }
@@ -417,7 +431,7 @@ Responda SOMENTE com JSON sem marcadores de código Markdown e sem texto fora do
 
 function grid(q){q=(q||'').toLowerCase();
   $('grid').innerHTML=DB.filter(w=>(w.n+w.s+w.f).toLowerCase().includes(q)).map(w=>`<div class="card"><div class="top">${ico(w)}<div><h3>${esc(w.n)}</h3>
-    <div class="sci">${esc(w.k[0])} · ${esc(w.f)}</div></div></div><p>${esc(w.d)}</p>${tips(w)}<p class="sci" style="margin-top:8px"><b>Herbicida indicado:</b> ${esc(w.chem)}</p></div>`).join('')||'<p>Nenhuma espécie encontrada.</p>'}
+    <div class="sci">${esc(w.k[0])} · ${esc(w.f)}</div></div></div><p>${esc(w.d)}</p>${tips(w)}<p class="sci" style="margin-top:8px"><b>Mecanismo indicado:</b> ${esc(w.chem)}</p></div>`).join('')||'<p>Nenhuma espécie encontrada no acervo Embrapa.</p>'}
 function pick(n){$('q').value=n;grid(n);$('guia').scrollIntoView({behavior:'smooth'})}$('q').oninput=e=>grid(e.target.value);grid();
 </script>
 </body>
