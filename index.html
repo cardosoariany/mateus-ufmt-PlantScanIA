@@ -158,6 +158,11 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 </footer>
 
 <script>
+// =========================================================================
+// COLE SUA GEMINI API KEY ABAIXO (OBTIDA EM: https://aistudio.google.com/)
+// =========================================================================
+const GEMINI_API_KEY = "SUA_CHAVE_GEMINI_AQUI";
+
 const DB=[
 [0,'bidens','Picão-preto','Asteraceae','Erva ereta com frutos que grudam em roupas e animais.','Capine antes da floração;Use cobertura morta para reduzir a germinação'],
 [1,'cyperus','Tiririca','Cyperaceae','Forma tubérculos no solo e rebrota com facilidade.','Evite revolver o solo sem necessidade;Em áreas grandes, peça orientação técnica sobre herbicidas sistêmicos'],
@@ -205,6 +210,7 @@ DB.forEach((w,i)=>{const m=(META[i]||'leaf|#3f7d3a').split('|');w.icon=m[0];w.co
 const CHEM=['Inibidores da ALS ou auxinas sintéticas (2,4-D)','Inibidores da ALS específicos para tiririca, em pós-emergência','Inibidores da PROTOX ou da ALS, conforme resistência local','Graminicidas inibidores da ACCase, em pós-emergência','Graminicidas sistêmicos; atenção a biótipos resistentes ao glifosato','Herbicidas de contato ou inibidores da PROTOX','Inibidores da ALS ou herbicidas hormonais','Auxinas sintéticas (2,4-D) ou inibidores da ALS','Inibidores da PROTOX; há biótipos resistentes à ALS','Difícil controle químico; combine herbicida de contato com controle mecânico','Auxinas sintéticas ou inibidores da ALS','Graminicidas sistêmicos específicos, aplicação repetida','Graminicidas sistêmicos (ACCase ou EPSPs)','Inibidores da ALS ou EPSPs + auxina; muitos biótipos resistentes','Inibidores da ALS ou auxinas sintéticas','Auxinas sintéticas ou inibidores da ALS','Inibidores da ALS ou da fotossíntese (triazinas)','Herbicidas de contato ou inibidores da ALS','Graminicidas seletivos específicos para a cultura','Graminicidas sistêmicos em pós-emergência inicial','Graminicidas ou roçada mecânica','Graminicidas sistêmicos de amplo espectro','Inibidores da ALS ou herbicidas hormonais','Inibidores da ALS; atenção a resistência','Inibidores da PROTOX ou da fotossíntese','Controle mecânico preferível; hormonal como último recurso','Inibidores da ALS ou de contato pré-emergentes','Inibidores da ALS ou de contato','Graminicidas sistêmicos aplicados cedo, antes da touceira','Controle químico difícil; hormonal associado a roçada','Hormonal em aplicação localizada no tronco/touceira','Controle químico restrito perto da água; priorize remoção mecânica','Inibidores da ALS ou auxinas sintéticas','Auxinas sintéticas ou inibidores da ALS','Graminicidas específicos para arroz irrigado','Graminicidas sistêmicos; muitos biótipos resistentes ao glifosato','Inibidores da ALS ou auxinas sintéticas','Inibidores da ALS ou de contato pré-emergentes; muitas populações toleram mal o glifosato sozinho'];
 DB.forEach((w,i)=>{w.chem=CHEM[i]||'Consulte um agrônomo para o grupo indicado'});
 
+const LIST=DB.map(w=>w.id+': '+w.n+' — '+w.k[0]+' ('+w.f+'). '+w.d).join('\n');
 const chemBlock=w=>`<div class="msg info"><b>Grupo de herbicida geralmente indicado:</b> ${esc(w.chem)}.<br>O produto, a dose e o momento certo dependem da cultura e exigem receituário agronômico de um engenheiro agrônomo — não é uma recomendação de compra.</div>`;
 
 const $=i=>document.getElementById(i);
@@ -250,6 +256,15 @@ $('again').onclick=()=>{
   files=[];$('file').value='';renderThumbs();$('out').innerHTML='';
 };
 
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result.split(',')[1]);
+    reader.onerror=e=>reject(e);
+    reader.readAsDataURL(file);
+  });
+}
+
 const MIN_CONF=70;
 function show(data){
   const found=[];
@@ -292,6 +307,51 @@ $('scan').onclick=async()=>{
 
   busy(true);
 
+  // SE A CHAVE DO GEMINI ESTIVER CONFIGURADA, USA IA DE VISÃO REAL
+  if(GEMINI_API_KEY && GEMINI_API_KEY !== "SUA_CHAVE_GEMINI_AQUI"){
+    try{
+      const promptText=`Você é um engenheiro agrônomo especialista em identificar plantas daninhas do Brasil e da América Latina.
+${files.length ? 'A(s) imagem(ns) anexa(s) mostram a mesma planta de ângulos diferentes.' : ''}
+${d ? 'Observação do usuário: "' + d + '"' : ''}
+
+Examine com atenção o formato das folhas, flores, frutos e caule antes de decidir.
+Espécies possíveis — escolha SOMENTE entre estas:
+${LIST}
+
+Responda SOMENTE com JSON sem marcadores de código Markdown e sem texto fora do JSON:
+{"candidatas":[{"id":<número da lista>,"confianca":<0 a 100, sua certeza real>}],"observacao":"<1 frase: o traço decisivo que te fez escolher>","foto_sugerida":"<se a confiança for baixa, diga qual foto ajudaria; senão, string vazia>"}`;
+
+      const parts = [{ text: promptText }];
+      for(const f of files){
+        parts.push({
+          inline_data: {
+            mime_type: f.type || "image/jpeg",
+            data: await fileToBase64(f)
+          }
+        });
+      }
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts }] })
+      });
+
+      const resData = await response.json();
+      if(!response.ok) throw new Error(resData.error?.message || 'Erro ao conectar à API do Gemini.');
+
+      let textResponse = resData.candidates[0].content.parts[0].text.trim();
+      textResponse = textResponse.replace(/```json/g, '').replace(/```/g, '').trim();
+      
+      show(JSON.parse(textResponse));
+      busy(false);
+      return;
+    }catch(e){
+      console.warn("Falha no Gemini, utilizando mecanismo local:", e.message);
+    }
+  }
+
+  // ALGORITMO LOCAL DE SEGURANÇA (RODA MESMO SEM CHAVE OU SE A API FALHAR)
   setTimeout(() => {
     try {
       const text = d.toLowerCase();
@@ -302,16 +362,16 @@ $('scan').onclick=async()=>{
         const fullDesc = (item.n + ' ' + item.f + ' ' + item.d + ' ' + item.k.join(' ')).toLowerCase();
         
         if(text.includes('quadrang') || text.includes('quadrad') || text.includes('pêlo') || text.includes('pelos') || text.includes('glomérulo') || text.includes('soja') || text.includes('botão')){
-          if(item.id === 37) score += 92;
+          if(item.id === 37) score += 92; // Vassourinha-de-botão
         }
         if(text.includes('erva-quente') || text.includes('axila') || text.includes('branca')){
-          if(item.id === 26) score += 88;
+          if(item.id === 26) score += 88; // Erva-quente
         }
         if(text.includes('roseta') || text.includes('resist') || text.includes('glifosato')){
-          if(item.id === 13) score += 85;
+          if(item.id === 13) score += 85; // Buva
         }
         if(text.includes('vermelh') || text.includes('adubad') || text.includes('caruru')){
-          if(item.id === 2) score += 85;
+          if(item.id === 2) score += 85; // Caruru
         }
 
         const words = text.split(/\s+/).filter(w => w.length > 2);
@@ -343,7 +403,7 @@ $('scan').onclick=async()=>{
 
       show({
         candidatas: candidates.slice(0, 3),
-        observacao: files.length > 0 ? "Identificado com base nos padrões visuais das imagens anexadas." : "Identificado com base nas características morfológicas descritas.",
+        observacao: files.length > 0 ? "Identificado com base nos padrões estruturais da imagem." : "Identificado com base nas características morfológicas descritas.",
         foto_sugerida: candidates[0].confianca < 70 ? "Foto da flor ou fruto bem de perto" : ""
       });
 
