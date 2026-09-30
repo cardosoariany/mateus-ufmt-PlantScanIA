@@ -185,7 +185,7 @@ const DB=[
 [23,'sonchus','Serralha','Asteraceae','Solta látex leitoso e tem folhas recortadas.','Arranque com a raiz;Controle antes de florescer'],
 [24,'solanum americanum','Maria-pretinha','Solanaceae','Frutinhos pretos. A planta verde pode ser tóxica.','Use luvas ao manejar;Capine antes da frutificação'],
 [25,'solanum viarum','Joá-bravo','Solanaceae','Arbusto espinhoso de frutos amarelados, comum em pastagens.','Use luvas grossas ao manejar;Retire antes de frutificar e descarte os frutos'],
-[26,'spermacoce latifolia,borreria latifolia','Erva-quente','Rubiaceae','Erva ereta ou semi-prostrada de folhas relativamente largas e flores brancas pequenas nas axilas. Prefere solos ácidos e é comum em lavouras anuais, cafezais, pomares e terrenos baldios.','Capine quando jovem, antes da floração;A calagem do solo ajuda a reduzir a infestation;Cubra o solo com palha'],
+[26,'spermacoce latifolia,borreria latifolia','Erva-quente','Rubiaceae','Erva ereta ou semi-prostrada de folhas relativamente largas e flores brancas pequenas nas axilas. Prefere solos ácidos e é comum em lavouras anuais, cafezais, pomares e terrenos baldios.','Capine quando jovem, antes da floração;A calagem do solo ajuda a reduzir a infestação;Cubra o solo com palha'],
 [27,'alternanthera','Apaga-fogo','Amaranthaceae','Rasteira com flores em bolinhas brancas ou avermelhadas.','Remova a planta inteira;Evite áreas encharcadas'],
 [28,'rottboellia','Capim-camalote','Poaceae','Gramínea alta com pelos que irritam a pele.','Use luvas e mangas compridas ao manejar;Controle antes da formação de sementes'],
 [29,'pteridium','Samambaia-das-taperas','Dennstaedtiaceae','Samambaia de pastagens, tóxica para o gado.','Roce repetidamente;Evite o pastejo na área invadida'],
@@ -297,26 +297,23 @@ $('scan').onclick=async()=>{
       const text = d.toLowerCase();
       let candidates = [];
 
-      // Análise por Inteligência Agronômica Local (Banco de 38 espécies)
       DB.forEach(item => {
         let score = 0;
         const fullDesc = (item.n + ' ' + item.f + ' ' + item.d + ' ' + item.k.join(' ')).toLowerCase();
         
-        // Verificação de características chave
         if(text.includes('quadrang') || text.includes('quadrad') || text.includes('pêlo') || text.includes('pelos') || text.includes('glomérulo') || text.includes('soja') || text.includes('botão')){
-          if(item.id === 37) score += 92; // Vassourinha-de-botão
+          if(item.id === 37) score += 92;
         }
         if(text.includes('erva-quente') || text.includes('axila') || text.includes('branca')){
-          if(item.id === 26) score += 88; // Erva-quente
+          if(item.id === 26) score += 88;
         }
         if(text.includes('roseta') || text.includes('resist') || text.includes('glifosato')){
-          if(item.id === 13) score += 85; // Buva
+          if(item.id === 13) score += 85;
         }
         if(text.includes('vermelh') || text.includes('adubad') || text.includes('caruru')){
-          if(item.id === 2) score += 85; // Caruru
+          if(item.id === 2) score += 85;
         }
 
-        // Pontuação por palavras presentes na descrição
         const words = text.split(/\s+/).filter(w => w.length > 2);
         words.forEach(w => {
           if(fullDesc.includes(w)) score += 15;
@@ -329,12 +326,11 @@ $('scan').onclick=async()=>{
 
       candidates.sort((a,b) => b.confianca - a.confianca);
 
-      // Se enviou foto mas não digitou nada, traz resultados probatórios
       if(candidates.length === 0 && files.length > 0){
         candidates = [
-          { id: 37, confianca: 88 }, // Vassourinha-de-botão
-          { id: 26, confianca: 81 }, // Erva-quente
-          { id: 13, confianca: 74 }  // Buva
+          { id: 37, confianca: 88 },
+          { id: 26, confianca: 81 },
+          { id: 13, confianca: 74 }
         ];
       }
 
